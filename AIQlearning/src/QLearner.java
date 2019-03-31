@@ -1,6 +1,7 @@
 public class QLearner {  
     /**
-     * This method performs Q-learning. TODO complete documentation.
+     * This method performs Q-learning
+     * 
      * @param rewards
      * @param paths
      * @param gamma
@@ -41,19 +42,20 @@ public class QLearner {
         // Follow the moves along the path
         for (int i = 1; i < path.length; i++) {
             // Look for the best valid move
-            Double bestMove = 0.0;
+            Double bestReward = 0.0;
             
             for (int j = 0; j < Q.length; j++) {
-                // If path is valid and value is higher than current bestMove
-                if (rewards[path[i]][j] != null && bestMove < Q[path[i]][j]) {
-                    // Save new bestMove
-                    bestMove = Q[path[i]][j];
+                // If path is valid 
+                // and expected reward is higher than current bestReward
+                if (rewards[path[i]][j] != null && bestReward < Q[path[i]][j]) {
+                    // Save new bestReward
+                    bestReward = Q[path[i]][j];
                 }
                 // Else it is not a valid move and skip to next 'j' iteration
             }
             
             // Set new Q value
-            Q[path[i - 1]][path[i]] = rewards[path[i - 1]][path[i]] + gamma * bestMove;
+            Q[path[i - 1]][path[i]] = rewards[path[i - 1]][path[i]] + gamma * bestReward;
         }
     }
 
@@ -64,25 +66,25 @@ public class QLearner {
         
         for (Double[] state : Q) {
             // Set impossible values as lower bound
-            Double bestMove = -1d;
+            Double bestReward = -1d;
             bestMoveIndex = -1;
             
             // Look for best valid move for current state
             for (int i = 0; i < state.length; i++) {
-                // If state is valid and better than current bestMove
-                if (state[i] != null && bestMove < state[i]) {
-                    // Set new bestMove and its index
-                    bestMove = state[i];
+                // If state is valid and better than current bestReward
+                if (state[i] != null && bestReward < state[i]) {
+                    // Set new bestReward and its index
+                    bestReward = state[i];
                     bestMoveIndex = i;
                 }
                 // Else state is invalid and skip to next 'i' iteration
             }
             
-            // If there was no valid move, then append "n" to output string
+            // If there was no valid action, then append "n" to output string
             if (bestMoveIndex == -1) {
                 result += "n ";
             } else {
-                // Else, append index of bestMove
+                // Else, append index of bestReward which is bestMoveIndex
                 result += bestMoveIndex + " ";
             }
         }
